@@ -4,11 +4,11 @@ var bodyParser=require('body-parser');
 var mysql=require('mysql');
 var port=4000;
 
-app.use(bodyParser());
+app.use(bodyParser.json());
 
 var pool=mysql.createPool({
-    connectionLimit:10,
-    host:"localhost",
+    connectionLimit:1000,
+    host:"127.0.0.1",
     username:"root",
     password:"root",
     database:"nodejscrud"
