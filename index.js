@@ -39,7 +39,7 @@ app.post('/users',(req,res)=>{
 
 //update records
 app.put('/users/:id',(req,res)=>{
-    pool.query("update users SET ? where id=?",[req.body,id],(error,results)=>{
+    pool.query("update users SET ? where id=?",[req.body,req.params.id],(error,results)=>{
         if(error) return error;
         res.send("Data updated"+id);
     })
