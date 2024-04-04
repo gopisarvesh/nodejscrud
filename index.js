@@ -7,30 +7,38 @@ var port=4000;
 app.use(bodyParser.json());
 
 var pool=mysql.createPool({
-    connectionLimit:1000,
-    host:"127.0.0.1",
-    username:"root",
+    connectionLimit:10,
+    host:"localhost",
+    user:"root",
     password:"root",
     database:"nodejscrud"
 
 })
+pool.getConnection((err,connection)=> {
+    if(err)
+    throw err;
+    console.log('Database connected successfully');
+    connection.release();
+  });
 //fetching all records
 app.get('/users',(req,res)=>{
-    pool.query("select * from users order by id desc",(error,results)=>{
-        if(error) return error;
-        res.send(results);
+    
+    pool.query("select * from users",(error,results)=>{
+        if(error) return error;    
+        res.status(200).json({msg:results});
+        
     })
 })
 //fetching single record
-app.get('/users/:id',(req,res)=>{
+app.get('/singleusers/:id',(req,res)=>{
     pool.query("select * from users where id=?",[req.params.id],(error,results)=>{
         if(error) return error;
-        res.send(results);
+        return res.send(results);
     })
 })
 
 //save records
-app.post('/users',(req,res)=>{
+app.post('/saveusers',(req,res)=>{
     pool.query("insert into users SET ?",req.body,(error,results)=>{
         if(error) return error;
         res.send("Data inserted"+results.insertedId);
@@ -38,7 +46,7 @@ app.post('/users',(req,res)=>{
 })
 
 //update records
-app.put('/users/:id',(req,res)=>{
+app.put('/updateusers/:id',(req,res)=>{
     pool.query("update users SET ? where id=?",[req.body,req.params.id],(error,results)=>{
         if(error) return error;
         res.send("Data updated"+id);
@@ -46,7 +54,7 @@ app.put('/users/:id',(req,res)=>{
 })
 
 //delete records
-app.delete('/users/:id',(req,res)=>{
+app.delete('/deleteusers/:id',(req,res)=>{
     pool.query("delete from users where id=?",[req.params,id],(error,results)=>{
         if(error) return error;
         res.send("Data deleted");
