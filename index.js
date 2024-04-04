@@ -25,7 +25,7 @@ app.get('/users',(req,res)=>{
     
     pool.query("select * from users",(error,results)=>{
         if(error) return error;    
-        res.status(200).json({msg:results});
+        res.send(results);
         
     })
 })
@@ -33,7 +33,7 @@ app.get('/users',(req,res)=>{
 app.get('/singleusers/:id',(req,res)=>{
     pool.query("select * from users where id=?",[req.params.id],(error,results)=>{
         if(error) return error;
-        return res.send(results);
+        res.send(results);
     })
 })
 
@@ -41,7 +41,7 @@ app.get('/singleusers/:id',(req,res)=>{
 app.post('/saveusers',(req,res)=>{
     pool.query("insert into users SET ?",req.body,(error,results)=>{
         if(error) return error;
-        res.send("Data inserted"+results.insertedId);
+        res.send("Data inserted");
     })
 })
 
@@ -49,13 +49,13 @@ app.post('/saveusers',(req,res)=>{
 app.put('/updateusers/:id',(req,res)=>{
     pool.query("update users SET ? where id=?",[req.body,req.params.id],(error,results)=>{
         if(error) return error;
-        res.send("Data updated"+id);
+        res.send("Data updated");
     })
 })
 
 //delete records
 app.delete('/deleteusers/:id',(req,res)=>{
-    pool.query("delete from users where id=?",[req.params,id],(error,results)=>{
+    pool.query("delete from users where id=?",[req.params.id],(error,results)=>{
         if(error) return error;
         res.send("Data deleted");
     })
